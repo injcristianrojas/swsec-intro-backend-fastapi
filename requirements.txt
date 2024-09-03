@@ -1,3 +1,4 @@
 #TODO vulerable to https://security.snyk.io/vuln/SNYK-PYTHON-FASTAPI-6228055
 fastapi==0.109.0
 fastapi-cli
+PyJWT==2.3.0

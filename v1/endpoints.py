@@ -1,11 +1,8 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
+from models import MessageInput
 from db import connect_db
 
 router = APIRouter()
-
-class Message(BaseModel):
-    message: str
 
 @router.get("/messages")
 async def get_messages():
@@ -20,7 +17,7 @@ async def get_messages():
     return json_results
 
 @router.post("/messages/add")
-async def post_message(message: Message):
+async def post_message(message: MessageInput):
     message = message.message
     print(message)
     conn = connect_db()
