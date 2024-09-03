@@ -8,4 +8,4 @@ app.include_router(v1_router, prefix="/api/v1")
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Move along. Nothing to see here."}
