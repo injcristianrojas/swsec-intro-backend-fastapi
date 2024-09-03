@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "SWSEC-INTRO FastAPI",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
