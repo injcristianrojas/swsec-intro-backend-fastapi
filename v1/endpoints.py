@@ -29,3 +29,15 @@ async def post_message(message: Message):
     conn.commit()
     conn.close()
     return [{"status": "OK"}]
+
+@router.get("/users/type/{id}")
+async def get_users_by_type(id):
+    conn = connect_db()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users WHERE user_type = " + id)
+    results = cur.fetchall()
+    conn.close()
+    json_results = []
+    for row in results:
+        json_results.append({"id": row[0], "username": row[1], "password": row[2]})
+    return json_results
