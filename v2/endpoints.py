@@ -43,7 +43,7 @@ async def login_for_access_token(user: LoginUser):
         "exp": datetime.now(UTC) + timedelta(hours=6),
     }
     token = create_access_token(user_data["username"], user_data["type"])
-    return Token(access_token=token, token_type="bearer")
+    return Token(token=token)
 
 
 @router.get("/messages")

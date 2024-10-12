@@ -7,8 +7,7 @@ class Message(MessageInput):
     id: int
 
 class Token(BaseModel):
-    access_token: str
-    token_type: str
+    token: str
 
 class LoginUser(BaseModel):
     username: str
