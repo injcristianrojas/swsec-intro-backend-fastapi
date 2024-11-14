@@ -11,6 +11,7 @@ app = FastAPI()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
+
 def create_access_token(username, user_type):
     payload = {
         "sub": username,
@@ -21,11 +22,10 @@ def create_access_token(username, user_type):
     return encoded_jwt
 
 
-def verify_token(token: str, credentials_exception):
+def verify_token(token, credentials_exception):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        return username
+        return payload.get("sub")
     except jwt.InvalidTokenError:
         raise credentials_exception
 
