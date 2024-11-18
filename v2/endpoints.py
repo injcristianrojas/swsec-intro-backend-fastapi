@@ -1,4 +1,3 @@
-from datetime import UTC, datetime, timedelta
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
 from db import connect_db
@@ -37,11 +36,6 @@ async def login_for_access_token(user: LoginUser):
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    payload = {
-        "username": user_data["username"],
-        "type": user_data["type"],
-        "exp": datetime.now(UTC) + timedelta(hours=6),
-    }
     token = create_access_token(user_data["username"], user_data["type"])
     return Token(token=token)
 
