@@ -74,5 +74,5 @@ async def get_users_by_type(id, current_user: Annotated[User, Depends(get_curren
     conn.close()
     json_results = []
     for row in results:
-        json_results.append({"id": row[0], "username": row[1], "password": row[2]})
+        json_results.append({"id": row[0], "username": row[1]})
     return json_results
