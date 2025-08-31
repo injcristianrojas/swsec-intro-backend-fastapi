@@ -1,10 +1,11 @@
 import subprocess
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from db import init_db
 
-from v1.endpoints import router as v1_router
-from v2.endpoints import router as v2_router
+from .db import init_db
+from .v1.endpoints import router as v1_router
+from .v2.endpoints import router as v2_router
 
 init_db()
 

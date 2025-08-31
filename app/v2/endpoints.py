@@ -1,8 +1,8 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
-from db import connect_db
-from jwt_handler import create_access_token, get_current_user
-from models import LoginUser, Message, MessageInput, Token, User
+from ..db import connect_db
+from ..jwt_handler import create_access_token, get_current_user
+from ..models import LoginUser, Message, MessageInput, Token, User
 
 SECRET_KEY = "123"
 ALGORITHM = "HS256"

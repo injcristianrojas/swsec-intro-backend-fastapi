@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from models import MessageInput
-from db import connect_db
+from ..models import MessageInput
+from ..db import connect_db
 
 router = APIRouter()
 
