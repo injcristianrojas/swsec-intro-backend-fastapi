@@ -3,11 +3,9 @@ import subprocess
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .db import init_db
+from .database import init_db
 from .v1.endpoints import router as v1_router
 from .v2.endpoints import router as v2_router
-
-init_db()
 
 app = FastAPI()
 
@@ -22,6 +20,10 @@ app.add_middleware(
 
 app.include_router(v1_router, prefix="/api/v1", include_in_schema=False)
 app.include_router(v2_router, prefix="/api/v2")
+
+@app.on_event("startup")
+def on_startup():
+    init_db()
 
 @app.get("/healthcheck")
 @app.get("/healthcheck/{file}")
