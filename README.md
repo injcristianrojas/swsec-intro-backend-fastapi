@@ -1,6 +1,6 @@
 # swsec-intro-backend-fastapi
 
-Run using `fastapi run app.py --port 9000`
+Run using `uv run fastapi dev --port 9000`
 
 ## Dockerized version
 
