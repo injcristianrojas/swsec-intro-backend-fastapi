@@ -1,43 +1,37 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import Column, Integer, String
+from sqlmodel import Field, Session, SQLModel, create_engine
 
-SQLALCHEMY_DATABASE_URL = 'sqlite:///db.sqlite'
+DATABASE_URL = "sqlite:///db.sqlite"
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+engine = create_engine(DATABASE_URL, echo=True)
 
-class Message(Base):
-    __tablename__ = "messages"
 
-    id = Column(Integer, primary_key=True, index=True)
-    message = Column(String, index=True, nullable=False)
+class Message(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    message: str
 
-class User(Base):
-    __tablename__ = "users"
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(10), index=True, nullable=False)
-    password = Column(String(10), index=True, nullable=False)
-    user_type = Column(Integer, index=True, nullable=False)
+
+class User(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    username: str
+    password: str
+    user_type: int
+
 
 def init_db():
-    Base.metadata.create_all(engine)
-    session = SessionLocal()
-    initial_data = [
-        Message(message="Bienvenidos al foro de Fans de las Aves Chilenas. Soy el Administrador."),
-        Message(message="Se informa que la API se encuentra deshabilitada hasta nuevo aviso."),
-        User(username="zorzal", password="fio", user_type=2),
-        User(username="admin", password="stgeddesudf", user_type=1),
-        User(username="chincol", password="fiofio", user_type=2),
-    ]
-    session.add_all(initial_data)
-    session.commit()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+    SQLModel.metadata.drop_all(engine)
+    SQLModel.metadata.create_all(engine)
+    with Session(engine) as session:
+        session.add(
+            Message(
+                message="Bienvenidos al foro de Fans de las Aves Chilenas. Soy el Administrador."
+            )
+        )
+        session.add(
+            Message(
+                message="Se informa que la API se encuentra deshabilitada hasta nuevo aviso."
+            )
+        )
+        session.add(User(username="zorzal", password="fio", user_type=2))
+        session.add(User(username="admin", password="stgeddesudf", user_type=1))
+        session.add(User(username="chincol", password="fiofio", user_type=2))
+        session.commit()

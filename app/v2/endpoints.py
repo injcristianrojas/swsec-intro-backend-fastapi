@@ -1,6 +1,5 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, status
-from ..db import connect_db
 from ..jwt_handler import create_access_token, get_current_user
 
 SECRET_KEY = "123"
@@ -9,21 +8,21 @@ ALGORITHM = "HS256"
 router = APIRouter()
 
 
-def get_user_data(username, password):
-    conn = connect_db()
-    cur = conn.cursor()
-    cur.execute(
-        "SELECT * FROM users WHERE username = '"
-        + username
-        + "' AND password = '"
-        + password
-        + "'"
-    )
-    results = cur.fetchall()
-    conn.close()
-    if len(results) == 0:
-        return None
-    return {"username": results[0][1], "type": results[0][3]}
+# def get_user_data(username, password):
+#    conn = connect_db()
+#    cur = conn.cursor()
+#    cur.execute(
+#        "SELECT * FROM users WHERE username = '"
+#        + username
+#        + "' AND password = '"
+#        + password
+#        + "'"
+#    )
+#    results = cur.fetchall()
+#    conn.close()
+#    if len(results) == 0:
+#        return None
+#    return {"username": results[0][1], "type": results[0][3]}
 
 
 # @router.post("/login")
