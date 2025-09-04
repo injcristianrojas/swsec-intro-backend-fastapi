@@ -15,15 +15,7 @@ router = APIRouter()
 @router.post("/login")
 async def login_for_access_token(user_login: UserLogin):
     with Session(engine) as session:
-        user = session.exec(
-            text(
-                "SELECT * FROM user WHERE username = '"
-                + user_login.username
-                + "' AND password = '"
-                + user_login.password
-                + "'"
-            )
-        ).first()
+        user = session.exec(text(f"SELECT * FROM user WHERE username = '{user_login.username}' AND password = '{user_login.password}'")).first()
         if user is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
