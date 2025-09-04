@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlmodel import Session, select
+from sqlmodel import Session, select, text
 
 from ..database import Message, MessageInsert, User, UserLogin, Token, engine
 from ..jwt_handler import create_access_token, get_current_user
@@ -16,9 +16,13 @@ router = APIRouter()
 async def login_for_access_token(user_login: UserLogin):
     with Session(engine) as session:
         user = session.exec(
-            select(User)
-            .where(User.username == user_login.username)
-            .where(User.password == user_login.password)
+            text(
+                "SELECT * FROM user WHERE username = '"
+                + user_login.username
+                + "' AND password = '"
+                + user_login.password
+                + "'"
+            )
         ).first()
         if user is None:
             raise HTTPException(
