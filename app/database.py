@@ -5,9 +5,16 @@ DATABASE_URL = "sqlite:///db.sqlite"
 engine = create_engine(DATABASE_URL, echo=True)
 
 
-class Message(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+class MessageBase(SQLModel):
     message: str
+
+
+class Message(MessageBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+
+
+class MessageInsert(MessageBase):
+    pass
 
 
 class User(SQLModel, table=True):

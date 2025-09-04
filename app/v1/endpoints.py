@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from sqlmodel import Session, select
 
-from ..database import Message, User, engine
+from ..database import Message, MessageInsert, User, engine
 
 router = APIRouter()
 
@@ -13,16 +13,12 @@ async def get_messages():
         return messages
 
 
-# @router.post("/messages/add")
-# async def post_message(message: MessageInput):
-# message = message.message
-# print(message)
-# conn = connect_db()
-# cur = conn.cursor()
-# cur.execute("INSERT INTO messages(message) VALUES ('" + message + "')")
-# conn.commit()
-# conn.close()
-# return [{"status": "OK"}]
+@router.post("/messages/add")
+async def post_message(message_insert: MessageInsert):
+    with Session(engine) as session:
+        session.add(Message(message=message_insert.message))
+        session.commit()
+    return [{"status": "OK"}]
 
 
 @router.get("/users/type/{id}", response_model=list[User])
