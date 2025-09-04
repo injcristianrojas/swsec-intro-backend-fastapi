@@ -1,5 +1,9 @@
 from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlmodel import Session, select
+
+from ..database import User, UserLogin, Token, engine
 from ..jwt_handler import create_access_token, get_current_user
 
 SECRET_KEY = "123"
@@ -8,34 +12,22 @@ ALGORITHM = "HS256"
 router = APIRouter()
 
 
-# def get_user_data(username, password):
-#    conn = connect_db()
-#    cur = conn.cursor()
-#    cur.execute(
-#        "SELECT * FROM users WHERE username = '"
-#        + username
-#        + "' AND password = '"
-#        + password
-#        + "'"
-#    )
-#    results = cur.fetchall()
-#    conn.close()
-#    if len(results) == 0:
-#        return None
-#    return {"username": results[0][1], "type": results[0][3]}
-
-
-# @router.post("/login")
-# async def login_for_access_token(user: LoginUser):
-#     user_data = get_user_data(user.username, user.password)
-#     if user_data is None:
-#         raise HTTPException(
-#             status_code=status.HTTP_401_UNAUTHORIZED,
-#             detail="Incorrect username or password",
-#             headers={"WWW-Authenticate": "Bearer"},
-#         )
-#     token = create_access_token(user_data["username"], user_data["type"])
-#     return Token(token=token)
+@router.post("/login")
+async def login_for_access_token(user_login: UserLogin):
+    with Session(engine) as session:
+        user = session.exec(
+            select(User)
+            .where(User.username == user_login.username)
+            .where(User.password == user_login.password)
+        ).first()
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Incorrect username or password",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        token = create_access_token(user.username, user.user_type)
+        return Token(token=token)
 
 
 # @router.get("/messages")

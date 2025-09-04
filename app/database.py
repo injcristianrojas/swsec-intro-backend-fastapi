@@ -17,11 +17,22 @@ class MessageInsert(MessageBase):
     pass
 
 
-class User(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
+class UserBase(SQLModel):
     username: str
     password: str
+
+
+class User(UserBase, table=True):
+    id: int | None = Field(default=None, primary_key=True)
     user_type: int
+
+
+class UserLogin(UserBase):
+    pass
+
+
+class Token(SQLModel):
+    token: str
 
 
 def init_db():
