@@ -10,3 +10,7 @@ dependencies = [
     "pyjwt==2.3.0",
     "sqlmodel>=0.0.24",
 ]
+
+[tool.ruff.lint]
+select = ["S"]
+ignore = ["ALL"]
